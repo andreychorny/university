@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.validation.constraints.Null;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -29,7 +31,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
-    public Department findByName(String departmentName) {
+    public Department findByName(String departmentName) throws NoResultException {
         Session currentSession = entityManager.unwrap(Session.class);
         Query query = currentSession.createQuery("SELECT d FROM Department d WHERE d.name= " +
                 ":departmentName");
@@ -46,5 +48,19 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
         query.setParameter("departmentName",  departmentName);
         Lector head = (Lector)query.getSingleResult();
         return head;
+    }
+
+    @Override
+    public BigDecimal findAverageSalary(String departmentName) throws NoResultException {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query query = currentSession.createQuery("SELECT AVG(l.salary) FROM Department d " +
+                "JOIN d.lectors l WHERE d.name= :departmentName");
+        query.setParameter("departmentName",  departmentName);
+        try{
+            BigDecimal avgSalary = BigDecimal.valueOf((double)query.getSingleResult());
+            return avgSalary;
+        }catch (NullPointerException nullPointerException){
+            throw new NoResultException("no result after search - wrong data");
+        }
     }
 }

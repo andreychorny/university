@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -67,6 +68,20 @@ public class DepartmentServiceImpl implements DepartmentService {
                     + stringBuffers[i].toString());
         }
         return department;
+    }
+
+    @Override
+    public BigDecimal findAverageSalary(String departmentName) {
+        BigDecimal avgSalary;
+        try{
+            avgSalary = departmentRepository.findAverageSalary(departmentName);
+        }catch (NoResultException | EmptyResultDataAccessException exception){
+            System.out.println("Wrong name of department");
+            return null;
+        }
+        System.out.println("The average salary of " + departmentName + " is " +
+                avgSalary);
+        return avgSalary;
     }
 
 }
