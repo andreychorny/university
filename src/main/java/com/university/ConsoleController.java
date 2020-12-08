@@ -66,6 +66,8 @@ public class ConsoleController {
         }
     }
 
+    //All console commands are hard-codded as regex.
+    //Pay attention: actual user input ALWAYS should be in the second match group
     public String[] initializeAllRegexCommands(){
         String[] regexes = new String[6];
         regexes[0] = "(Who is head of department) +(.+)";
