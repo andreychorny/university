@@ -12,6 +12,10 @@ public interface DepartmentService {
 
     public Lector findHead(String departmentName);
 
+    public Department findByName(String departmentName);
+
+    public int findCountOfEmployees(String departmentName);
+
     public Department showStatistics(String departmentName);
 
     public BigDecimal findAverageSalary(String departmentName);

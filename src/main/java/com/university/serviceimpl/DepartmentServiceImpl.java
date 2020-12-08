@@ -26,6 +26,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DegreeRepository degreeRepository;
 
     @Override
+    @Transactional
     public List<Department> findAll() {
         return departmentRepository.findAll();
     }
@@ -46,7 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional
-    public Department showStatistics(String departmentName) {
+    public Department findByName(String departmentName) {
         Department department;
         try{
             department = departmentRepository.findByName(departmentName);
@@ -54,6 +55,24 @@ public class DepartmentServiceImpl implements DepartmentService {
             System.out.println("Wrong name of department");
             return null;
         }
+        return department;
+    }
+
+    @Override
+    @Transactional
+    public int findCountOfEmployees(String departmentName) {
+        Department department = findByName(departmentName);
+        if(department==null) return -1;
+        int count = department.getLectors().size();
+        System.out.println(count);
+        return count;
+    }
+
+    @Override
+    @Transactional
+    public Department showStatistics(String departmentName) {
+        Department department = findByName(departmentName);
+        if(department == null) return null;
         List<Degree> possibleDegrees = degreeRepository.findAll();
         StringBuffer[] stringBuffers = new StringBuffer[possibleDegrees.size()];
         int[] countPerDegree = new int[possibleDegrees.size()];
@@ -71,6 +90,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    @Transactional
     public BigDecimal findAverageSalary(String departmentName) {
         BigDecimal avgSalary;
         try{

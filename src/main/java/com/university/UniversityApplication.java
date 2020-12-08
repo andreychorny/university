@@ -24,5 +24,6 @@ public class UniversityApplication implements CommandLineRunner {
 		departmentService.findHead("NU_LP2");
 		departmentService.showStatistics("NU_LP");
 		departmentService.findAverageSalary("NU_LP");
+		departmentService.findCountOfEmployees("NU_LP");
 	}
 }
