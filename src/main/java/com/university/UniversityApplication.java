@@ -24,10 +24,6 @@ public class UniversityApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		departmentService.findHead("UoL");
-		departmentService.showStatistics("UoL");
-		departmentService.findAverageSalary("UoL");
-		departmentService.findCountOfEmployees("UoL");
-		consoleController.findByTemplate("a");
+		consoleController.start();
 	}
 }
