@@ -10,4 +10,6 @@ public interface DepartmentService {
     public List<Department> findAll();
 
     public Lector findHead(String departmentName);
+
+    public Department showStatistics(String departmentName);
 }

@@ -20,13 +20,22 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Department> findAll() {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<Department> query =
                 currentSession.createQuery("from Department", Department.class);
         List<Department> departments = query.getResultList();
         return departments;
+    }
+
+    @Override
+    public Department findByName(String departmentName) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query query = currentSession.createQuery("SELECT d FROM Department d WHERE d.name= " +
+                ":departmentName");
+        query.setParameter("departmentName",  departmentName);
+        Department department = (Department) query.getSingleResult();
+        return department;
     }
 
     @Override
