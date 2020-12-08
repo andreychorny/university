@@ -26,16 +26,16 @@ public class Department {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "head_id", referencedColumnName = "id")
-    private Lector lector;
+    private Lector head;
 
     public Department() {
     }
 
-    public Department(Long id, String name, List<Lector> lectors, Lector lector) {
+    public Department(Long id, String name, List<Lector> lectors, Lector head) {
         this.id = id;
         this.name = name;
         this.lectors = lectors;
-        this.lector = lector;
+        this.head = head;
     }
 
     public Long getId() {
@@ -62,11 +62,11 @@ public class Department {
         this.lectors = lectors;
     }
 
-    public Lector getLector() {
-        return lector;
+    public Lector getHead() {
+        return head;
     }
 
-    public void setLector(Lector lector) {
-        this.lector = lector;
+    public void setHead(Lector head) {
+        this.head = head;
     }
 }

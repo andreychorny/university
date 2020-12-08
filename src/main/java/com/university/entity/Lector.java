@@ -25,7 +25,7 @@ public class Lector {
     private BigDecimal salary;
 
     @ManyToOne
-    @JoinColumn(name="id", nullable=false)
+    @JoinColumn(name="degree_id", nullable=false)
     private Degree degree;
 
     @ManyToMany(fetch=FetchType.LAZY,
@@ -88,5 +88,15 @@ public class Lector {
 
     public void setDepartments(List<Department> departments) {
         this.departments = departments;
+    }
+
+    @Override
+    public String toString() {
+        return "Lector{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                ", degree=" + degree.getName() +
+                '}';
     }
 }
