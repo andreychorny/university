@@ -14,6 +14,9 @@ public class UniversityApplication implements CommandLineRunner {
 	@Autowired
 	private DepartmentService departmentService;
 
+	@Autowired
+	private ConsoleController consoleController;
+
 	public static void main(String[] args) {
 
 		SpringApplication.run(UniversityApplication.class, args);
@@ -21,9 +24,10 @@ public class UniversityApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		departmentService.findHead("NU_LP2");
-		departmentService.showStatistics("NU_LP");
-		departmentService.findAverageSalary("NU_LP");
-		departmentService.findCountOfEmployees("NU_LP");
+		departmentService.findHead("UoL");
+		departmentService.showStatistics("UoL");
+		departmentService.findAverageSalary("UoL");
+		departmentService.findCountOfEmployees("UoL");
+		consoleController.findByTemplate("a");
 	}
 }

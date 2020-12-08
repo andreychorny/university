@@ -8,13 +8,15 @@ import java.util.List;
 
 public interface DepartmentRepository {
 
-    public List<Department> findAll();
+    List<Department> findAll();
 
-    public Department findByName(String departmetName);
+    List<Department> findListByTemplate(String template);
 
-    public Lector findHead(String departmentName);
+    Department findByName(String departmentName);
 
-    public BigDecimal findAverageSalary(String departmentName);
+    Lector findHead(String departmentName);
+
+    BigDecimal findAverageSalary(String departmentName);
 
 
 }

@@ -31,9 +31,19 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     }
 
     @Override
+    public List<Department> findListByTemplate(String template) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query<Department> query = currentSession.createQuery("SELECT d FROM Department d WHERE d.name LIKE " +
+                " :template");
+        query.setParameter("template", "%" + template + "%");
+        List<Department> departments = query.list();
+        return departments;
+    }
+
+    @Override
     public Department findByName(String departmentName) throws NoResultException {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query query = currentSession.createQuery("SELECT d FROM Department d WHERE d.name= " +
+        Query<Department> query = currentSession.createQuery("SELECT d FROM Department d WHERE d.name= " +
                 ":departmentName");
         query.setParameter("departmentName",  departmentName);
         Department department = (Department) query.getSingleResult();
@@ -43,10 +53,10 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     @Override
     public Lector findHead(String departmentName) throws NoResultException {
         Session currentSession = entityManager.unwrap(Session.class);
-        Query query = currentSession.createQuery("SELECT d.head FROM Department d WHERE d.name= " +
+        Query<Lector> query = currentSession.createQuery("SELECT d.head FROM Department d WHERE d.name= " +
                 ":departmentName");
         query.setParameter("departmentName",  departmentName);
-        Lector head = (Lector)query.getSingleResult();
+        Lector head = query.getSingleResult();
         return head;
     }
 

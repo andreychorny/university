@@ -1,10 +1,10 @@
-package com.university.repository;
+package com.university.service;
 
 import com.university.entity.Lector;
 
 import java.util.List;
 
-public interface LectorRepository {
+public interface LectorService {
 
     List<Lector> findAll();
 

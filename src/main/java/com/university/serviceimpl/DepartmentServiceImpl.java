@@ -5,6 +5,7 @@ import com.university.entity.Department;
 import com.university.entity.Lector;
 import com.university.repository.DegreeRepository;
 import com.university.repository.DepartmentRepository;
+import com.university.service.DegreeService;
 import com.university.service.DepartmentService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
 
     @Autowired
-    private DegreeRepository degreeRepository;
+    private DegreeService degreeService;
 
     @Override
     @Transactional
@@ -38,11 +39,19 @@ public class DepartmentServiceImpl implements DepartmentService {
         try{
             head = departmentRepository.findHead(departmentName);
         }catch (NoResultException exception){
-            System.out.println("Wrong name of department");
+            System.out.println("Wrong name of a department");
+            return null;
+        }catch (NullPointerException exception){
+            System.out.println("The department doesn't have head yet");
             return null;
         }
         System.out.println("Head of " + departmentName +" is " + head.getName());
         return head;
+    }
+
+    @Override
+    public List<Department> findListByTemplate(String template) {
+        return departmentRepository.findListByTemplate(template);
     }
 
     @Override
@@ -52,7 +61,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try{
             department = departmentRepository.findByName(departmentName);
         }catch (NoResultException | EmptyResultDataAccessException exception){
-            System.out.println("Wrong name of department");
+            System.out.println("Wrong name of a department");
             return null;
         }
         return department;
@@ -73,12 +82,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department showStatistics(String departmentName) {
         Department department = findByName(departmentName);
         if(department == null) return null;
-        List<Degree> possibleDegrees = degreeRepository.findAll();
+        List<Degree> possibleDegrees = degreeService.findAll();
         StringBuffer[] stringBuffers = new StringBuffer[possibleDegrees.size()];
         int[] countPerDegree = new int[possibleDegrees.size()];
+        for(int i=0; i<stringBuffers.length;i++){
+            stringBuffers[i] = new StringBuffer();
+        }
         for(Lector lector: department.getLectors()){
             int degreeIndex = lector.getDegree().getId()-1;
-            if(stringBuffers[degreeIndex]==null) stringBuffers[degreeIndex] = new StringBuffer();
             stringBuffers[degreeIndex].append(lector.getName() + "; ");
             countPerDegree[degreeIndex]++;
         }
@@ -96,7 +107,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try{
             avgSalary = departmentRepository.findAverageSalary(departmentName);
         }catch (NoResultException | EmptyResultDataAccessException exception){
-            System.out.println("Wrong name of department");
+            System.out.println("Wrong name of a department or the department has no employees yet");
             return null;
         }
         System.out.println("The average salary of " + departmentName + " is " +

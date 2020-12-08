@@ -8,15 +8,17 @@ import java.util.List;
 
 public interface DepartmentService {
 
-    public List<Department> findAll();
+    List<Department> findAll();
 
-    public Lector findHead(String departmentName);
+    Lector findHead(String departmentName);
 
-    public Department findByName(String departmentName);
+    List<Department> findListByTemplate(String template);
 
-    public int findCountOfEmployees(String departmentName);
+    Department findByName(String departmentName);
 
-    public Department showStatistics(String departmentName);
+    int findCountOfEmployees(String departmentName);
 
-    public BigDecimal findAverageSalary(String departmentName);
+    Department showStatistics(String departmentName);
+
+    BigDecimal findAverageSalary(String departmentName);
 }

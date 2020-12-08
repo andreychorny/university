@@ -1,5 +1,6 @@
 package com.university.repositoryimpl;
 
+import com.university.entity.Degree;
 import com.university.entity.Lector;
 import com.university.repository.LectorRepository;
 import org.hibernate.Session;
@@ -18,12 +19,21 @@ public class LectorRepositoryImpl implements LectorRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Lector> findAll() {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<Lector> query =
                 currentSession.createQuery("from Lector", Lector.class);
         List<Lector> lectors = query.getResultList();
+        return lectors;
+    }
+
+    @Override
+    public List<Lector> findListByTemplate(String template) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query<Lector> query = currentSession.createQuery("SELECT l FROM Lector l WHERE l.name LIKE " +
+                " :template");
+        query.setParameter("template", "%" + template + "%");
+        List<Lector> lectors = query.list();
         return lectors;
     }
 }

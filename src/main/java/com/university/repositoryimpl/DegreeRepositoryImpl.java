@@ -19,12 +19,21 @@ public class DegreeRepositoryImpl implements DegreeRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Degree> findAll() {
         Session currentSession = entityManager.unwrap(Session.class);
         Query<Degree> query =
                 currentSession.createQuery("from Degree", Degree.class);
         List<Degree> degrees = query.getResultList();
+        return degrees;
+    }
+
+    @Override
+    public List<Degree> findListByTemplate(String template) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query<Degree> query = currentSession.createQuery("SELECT d FROM Degree d WHERE d.name LIKE " +
+                " :template");
+        query.setParameter("template", "%" + template + "%");
+        List<Degree> degrees = query.list();
         return degrees;
     }
 }
