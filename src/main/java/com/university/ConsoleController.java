@@ -42,19 +42,19 @@ public class ConsoleController {
                 if(matcher.matches()){
                     switch (i){
                         case 0:
-                            findHeadOfDepartment(matcher.group(2));
+                            findHeadOfDepartment(matcher.group(1));
                             continue endlessConsole;
                         case 1:
-                            showDepartmentStatistics(matcher.group(2));
+                            showDepartmentStatistics(matcher.group(1));
                             continue endlessConsole;
                         case 2:
-                            findAvgSalary(matcher.group(2));
+                            findAvgSalary(matcher.group(1));
                             continue endlessConsole;
                         case 3:
-                            findCountOfEmployee(matcher.group(2));
+                            findCountOfEmployee(matcher.group(1));
                             continue endlessConsole;
                         case 4:
-                            findByTemplate(matcher.group(2));
+                            findByTemplate(matcher.group(1));
                             continue endlessConsole;
                         case 5:
                             showHelp();
@@ -67,14 +67,14 @@ public class ConsoleController {
     }
 
     //All console commands are hard-codded as regex.
-    //Pay attention: actual user input ALWAYS should be in the second match group
+    //Pay attention: actual user input ALWAYS should be in the match group, preferably first
     public String[] initializeAllRegexCommands(){
         String[] regexes = new String[6];
-        regexes[0] = "(Who is head of department) +(.+)";
-        regexes[1] = "(Show (.+) * statistics)";
-        regexes[2] = "(Show the average salary for the department) +(.+)";
-        regexes[3] = "(Show count of employee for) +(.+)";
-        regexes[4] = "(Global search by) +(.+)";
+        regexes[0] = "Who is head of department +(.+)";
+        regexes[1] = "Show (.+) * statistics";
+        regexes[2] = "Show the average salary for the department +(.+)";
+        regexes[3] = "Show count of employee for +(.+)";
+        regexes[4] = "Global search by +(.+)";
         regexes[5] = "^help$";
         return regexes;
     }
