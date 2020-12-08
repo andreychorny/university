@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,52 +33,35 @@ public class ConsoleController {
     public void start() throws IOException {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
-        String[] regexArray = initializeAllRegexCommands();
+        HashMap<String, Consumer<String>> regexMap = initializeAllRegexCommands();
         endlessConsole:
         while(true){
             System.out.println("Write a command:");
             String line = reader.readLine().trim();
-            for(int i=0; i<regexArray.length; i++){
-                String regex = regexArray[i];
+            for(Map.Entry<String, Consumer<String>> entry: regexMap.entrySet()){
+                String regex = entry.getKey();
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(line);
                 if(matcher.matches()){
-                    switch (i){
-                        case 0:
-                            findHeadOfDepartment(matcher.group(1));
-                            continue endlessConsole;
-                        case 1:
-                            showDepartmentStatistics(matcher.group(1));
-                            continue endlessConsole;
-                        case 2:
-                            findAvgSalary(matcher.group(1));
-                            continue endlessConsole;
-                        case 3:
-                            findCountOfEmployee(matcher.group(1));
-                            continue endlessConsole;
-                        case 4:
-                            findByTemplate(matcher.group(1));
-                            continue endlessConsole;
-                        case 5:
-                            showHelp();
-                            continue endlessConsole;
-                    }
+                    entry.getValue().accept(matcher.group(1));
+                    continue endlessConsole;
                 }
             }
             System.out.println("Wrong command. Try to type 'help' for assistance");
         }
     }
 
-    //All console commands are hard-codded as regex.
-    //Pay attention: actual user input ALWAYS should be in the match group, preferably first
-    public String[] initializeAllRegexCommands(){
-        String[] regexes = new String[6];
-        regexes[0] = "Who is head of department +(.+)";
-        regexes[1] = "Show (.+) * statistics";
-        regexes[2] = "Show the average salary for the department +(.+)";
-        regexes[3] = "Show count of employee for +(.+)";
-        regexes[4] = "Global search by +(.+)";
-        regexes[5] = "^help$";
+    //All console commands are hard-codded as map of regex, and Consumer-calling of their related methods
+    //Pay attention: actual user input ALWAYS should be in the match group, preferably first, and
+    //this match group is consumed
+    public HashMap<String, Consumer<String>> initializeAllRegexCommands(){
+        HashMap<String, Consumer<String>> regexes = new HashMap<>();
+        regexes.put("Who is head of department +(.+)", (s) -> findHeadOfDepartment(s));
+        regexes.put("Show (.+) * statistics", (s) -> showDepartmentStatistics(s));
+        regexes.put("Show the average salary for the department +(.+)", (s) -> findAvgSalary(s));
+        regexes.put("Show count of employee for +(.+)", (s) -> findCountOfEmployee(s));
+        regexes.put("Global search by +(.+)", (s)->findByTemplate(s));
+        regexes.put("^(help)$", (s) -> showHelp());
         return regexes;
     }
     public void showDepartmentStatistics(String departmentName){
